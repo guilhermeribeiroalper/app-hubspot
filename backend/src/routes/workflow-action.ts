@@ -17,7 +17,7 @@ export async function workflowActionRoute(app: FastifyInstance): Promise<void> {
     const rawBody = JSON.stringify(request.body);
     const signature = request.headers['x-hubspot-signature-v3'] as string | undefined;
 
-    if (!validateHubSpotSignature(rawBody, signature, env.CLIENT_SECRET)) {
+    if (env.CLIENT_SECRET && !validateHubSpotSignature(rawBody, signature, env.CLIENT_SECRET)) {
       request.log.warn('Invalid HubSpot signature');
       return reply.status(401).send({
         outputFields: { hs_execution_state: 'FAIL_CONTINUE', error_message: 'Invalid signature' },

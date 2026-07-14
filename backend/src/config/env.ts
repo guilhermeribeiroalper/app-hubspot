@@ -5,7 +5,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']).default('development'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   HUBSPOT_SERVICE_KEY: z.string().min(1, 'HUBSPOT_SERVICE_KEY is required'),
-  CLIENT_SECRET: z.string().min(1, 'CLIENT_SECRET is required'),
+  CLIENT_SECRET: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
