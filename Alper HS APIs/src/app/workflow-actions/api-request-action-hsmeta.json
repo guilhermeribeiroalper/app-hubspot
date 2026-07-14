@@ -1,0 +1,180 @@
+{
+  "uid": "api_request_action",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://REPLACE-ME.onrender.com/workflow-action",
+    "isPublished": false,
+    "supportedClients": [
+      {
+        "client": "WORKFLOWS"
+      }
+    ],
+    "inputFields": [
+      {
+        "typeDefinition": {
+          "name": "api_url",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "http_method",
+          "type": "enumeration",
+          "fieldType": "select",
+          "options": [
+            { "value": "GET", "label": "GET" },
+            { "value": "POST", "label": "POST" },
+            { "value": "PUT", "label": "PUT" },
+            { "value": "PATCH", "label": "PATCH" },
+            { "value": "DELETE", "label": "DELETE" }
+          ]
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "auth_type",
+          "type": "enumeration",
+          "fieldType": "select",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "bearer", "label": "Bearer Token" },
+            { "value": "api_key", "label": "API Key" },
+            { "value": "basic", "label": "Basic Auth" }
+          ]
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "auth_value",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "custom_headers",
+          "type": "string",
+          "fieldType": "textarea"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "request_body",
+          "type": "string",
+          "fieldType": "textarea"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "field_mapping",
+          "type": "string",
+          "fieldType": "textarea"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "timeout_ms",
+          "type": "number",
+          "fieldType": "number"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      }
+    ],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "status",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "properties_updated",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "error_message",
+          "type": "string",
+          "fieldType": "text"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "actionName": "API Request & Update",
+        "actionDescription": "Makes an HTTP request to an external API and updates HubSpot object properties with the response data.",
+        "actionCardContent": "Call {{http_method}} {{api_url}} and update object",
+        "appDisplayName": "Alper API Engine",
+        "inputFieldLabels": {
+          "api_url": "API Endpoint URL",
+          "http_method": "HTTP Method",
+          "auth_type": "Authentication Type",
+          "auth_value": "Auth Token / Credentials",
+          "custom_headers": "Custom Headers (JSON)",
+          "request_body": "Request Body (JSON)",
+          "field_mapping": "Response → Property Mapping (JSON)",
+          "timeout_ms": "Timeout (ms)"
+        },
+        "inputFieldDescriptions": {
+          "api_url": "The full URL of the external API endpoint to call",
+          "auth_value": "For Bearer: paste the token. For API Key: paste the key. For Basic: paste base64 encoded user:password",
+          "custom_headers": "Optional. JSON object with custom headers, e.g.: {\"X-Custom\": \"value\"}",
+          "request_body": "Optional. JSON body for POST/PUT/PATCH. Use {{object.property}} to reference object properties",
+          "field_mapping": "JSON mapping from response paths to HubSpot properties. Example: {\"data.email\": \"email\", \"data.name\": \"firstname\"}",
+          "timeout_ms": "Request timeout in milliseconds (default: 30000)"
+        },
+        "outputFieldLabels": {
+          "status": "Execution Status",
+          "properties_updated": "Updated Properties",
+          "error_message": "Error Message"
+        },
+        "executionRules": {
+          "success": "Properties updated: {{ properties_updated }}",
+          "noProperties": "No properties were mapped from the API response",
+          "error": "Error: {{ error_message }}"
+        }
+      }
+    },
+    "executionRules": [
+      {
+        "labelName": "success",
+        "conditions": {
+          "status": ["updated"]
+        }
+      },
+      {
+        "labelName": "noProperties",
+        "conditions": {
+          "status": ["no_properties_mapped"]
+        }
+      },
+      {
+        "labelName": "error",
+        "conditions": {
+          "status": ["failed"]
+        }
+      }
+    ],
+    "objectTypes": []
+  }
+}

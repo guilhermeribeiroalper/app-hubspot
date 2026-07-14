@@ -1,0 +1,38 @@
+{
+  "uid": "AlperHSAPIs_app",
+  "type": "app",
+  "config": {
+    "description": "App para requisições HTTP externas e atualização de objetos HubSpot via workflows",
+    "name": "Alper API Workflow Engine",
+    "distribution": "private",
+    "auth": {
+      "type": "oauth",
+      "redirectUrls": [
+        "http://localhost:3000"
+      ],
+      "requiredScopes": [
+        "oauth",
+        "crm.objects.contacts.read",
+        "crm.objects.companies.read",
+        "crm.objects.deals.read",
+        "crm.objects.custom.read",
+        "automation"
+      ],
+      "optionalScopes": [],
+      "conditionallyRequiredScopes": []
+    },
+    "permittedUrls": {
+      "fetch": [
+        "https://api.hubapi.com"
+      ],
+      "iframe": [],
+      "img": []
+    },
+    "support": {
+      "supportEmail": "guilherme.ribeiro@alperseguros.com.br",
+      "documentationUrl": "https://example.com/docs",
+      "supportUrl": "https://example.com/support",
+      "supportPhone": "+5542984176616"
+    }
+  }
+}

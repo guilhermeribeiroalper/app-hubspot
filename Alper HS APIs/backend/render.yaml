@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: hubspot-workflow-engine
+    runtime: docker
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: HUBSPOT_PRIVATE_APP_TOKEN
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: LOG_LEVEL
+        value: info
