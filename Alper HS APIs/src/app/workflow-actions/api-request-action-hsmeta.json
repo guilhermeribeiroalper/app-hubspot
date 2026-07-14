@@ -2,8 +2,8 @@
   "uid": "api_request_action",
   "type": "workflow-action",
   "config": {
-    "actionUrl": "https://REPLACE-ME.onrender.com/workflow-action",
-    "isPublished": false,
+    "actionUrl": "https://app-hubspot.onrender.com/workflow-action",
+    "isPublished": true,
     "supportedClients": [
       {
         "client": "WORKFLOWS"
@@ -99,20 +99,6 @@
     "outputFields": [
       {
         "typeDefinition": {
-          "name": "status",
-          "type": "string",
-          "fieldType": "text"
-        }
-      },
-      {
-        "typeDefinition": {
-          "name": "properties_updated",
-          "type": "string",
-          "fieldType": "text"
-        }
-      },
-      {
-        "typeDefinition": {
           "name": "error_message",
           "type": "string",
           "fieldType": "text"
@@ -121,9 +107,9 @@
     ],
     "labels": {
       "en": {
-        "actionName": "API Request & Update",
-        "actionDescription": "Makes an HTTP request to an external API and updates HubSpot object properties with the response data.",
-        "actionCardContent": "Call {{http_method}} {{api_url}} and update object",
+        "actionName": "API Request & Enrich",
+        "actionDescription": "Makes an HTTP request to an external API and returns the response data as output fields. Use a subsequent 'Edit record' action to map these fields to HubSpot properties.",
+        "actionCardContent": "Call {{http_method}} {{api_url}}",
         "appDisplayName": "Alper API Engine",
         "inputFieldLabels": {
           "api_url": "API Endpoint URL",
@@ -132,7 +118,7 @@
           "auth_value": "Auth Token / Credentials",
           "custom_headers": "Custom Headers (JSON)",
           "request_body": "Request Body (JSON)",
-          "field_mapping": "Response → Property Mapping (JSON)",
+          "field_mapping": "Response → Output Field Mapping (JSON)",
           "timeout_ms": "Timeout (ms)"
         },
         "inputFieldDescriptions": {
@@ -140,41 +126,14 @@
           "auth_value": "For Bearer: paste the token. For API Key: paste the key. For Basic: paste base64 encoded user:password",
           "custom_headers": "Optional. JSON object with custom headers, e.g.: {\"X-Custom\": \"value\"}",
           "request_body": "Optional. JSON body for POST/PUT/PATCH. Use {{object.property}} to reference object properties",
-          "field_mapping": "JSON mapping from response paths to HubSpot properties. Example: {\"data.email\": \"email\", \"data.name\": \"firstname\"}",
+          "field_mapping": "JSON mapping from API response paths to output field names. Example: {\"data.email\": \"api_email\", \"data.name\": \"api_name\"}",
           "timeout_ms": "Request timeout in milliseconds (default: 30000)"
         },
         "outputFieldLabels": {
-          "status": "Execution Status",
-          "properties_updated": "Updated Properties",
-          "error_message": "Error Message"
-        },
-        "executionRules": {
-          "success": "Properties updated: {{ properties_updated }}",
-          "noProperties": "No properties were mapped from the API response",
-          "error": "Error: {{ error_message }}"
+          "error_message": "Error Message (if failed)"
         }
       }
     },
-    "executionRules": [
-      {
-        "labelName": "success",
-        "conditions": {
-          "status": ["updated"]
-        }
-      },
-      {
-        "labelName": "noProperties",
-        "conditions": {
-          "status": ["no_properties_mapped"]
-        }
-      },
-      {
-        "labelName": "error",
-        "conditions": {
-          "status": ["failed"]
-        }
-      }
-    ],
     "objectTypes": []
   }
 }

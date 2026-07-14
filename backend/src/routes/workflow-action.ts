@@ -3,7 +3,6 @@ import { loadEnv } from '../config/env.js';
 import { validateHubSpotSignature } from '../services/hubspot-signature.js';
 import { makeExternalRequest } from '../services/http-client.js';
 import { mapResponseToProperties, parseFieldMapping } from '../services/field-mapper.js';
-import { updateHubSpotObject } from '../services/hubspot-updater.js';
 import { isDuplicate, markProcessed } from '../lib/idempotency.js';
 import type { HubSpotWorkflowPayload, WorkflowResponse } from '../types/workflow.js';
 
@@ -44,31 +43,17 @@ export async function workflowActionRoute(app: FastifyInstance): Promise<void> {
       execLog.info({ statusCode: apiResponse.status }, 'External request completed');
 
       const fieldMapping = parseFieldMapping(inputFields.field_mapping);
-      const hubspotProperties = mapResponseToProperties(apiResponse.data, fieldMapping);
-
-      if (Object.keys(hubspotProperties).length === 0) {
-        execLog.warn('No properties mapped from response');
-        markProcessed(callbackId);
-        return reply.status(200).send({
-          outputFields: {
-            hs_execution_state: 'SUCCESS',
-            status: 'no_properties_mapped',
-          },
-        });
-      }
-
-      await updateHubSpotObject(object.objectType, object.objectId, hubspotProperties);
+      const responseData = mapResponseToProperties(apiResponse.data, fieldMapping);
 
       markProcessed(callbackId);
 
-      const updatedProps = Object.keys(hubspotProperties).join(', ');
-      execLog.info({ propertiesUpdated: updatedProps }, 'HubSpot object updated');
+      const outputFieldNames = Object.keys(responseData).join(', ');
+      execLog.info({ outputFields: outputFieldNames }, 'Returning response data as output fields');
 
       const response: WorkflowResponse = {
         outputFields: {
           hs_execution_state: 'SUCCESS',
-          status: 'updated',
-          properties_updated: updatedProps,
+          ...responseData,
         },
       };
 
