@@ -1,11 +1,9 @@
-import { Client } from '@hubspot/api-client';
+import axios from 'axios';
 import { loadEnv } from '../config/env.js';
 
 const env = loadEnv();
 
-const hubspotClient = new Client({
-  accessToken: env.HUBSPOT_SERVICE_KEY,
-});
+const HUBSPOT_API_BASE = 'https://api.hubapi.com';
 
 const OBJECT_TYPE_MAP: Record<string, string> = {
   CONTACT: 'contacts',
@@ -24,6 +22,16 @@ export async function updateHubSpotObject(
   properties: Record<string, string>
 ): Promise<void> {
   const resolvedType = resolveObjectType(objectType);
+  const url = `${HUBSPOT_API_BASE}/crm/v3/objects/${resolvedType}/${objectId}`;
 
-  await hubspotClient.crm.basicApi.update(resolvedType, String(objectId), { properties });
+  await axios.patch(
+    url,
+    { properties },
+    {
+      headers: {
+        Authorization: `Bearer ${env.HUBSPOT_SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 }
