@@ -5,7 +5,6 @@ import { makeExternalRequest } from '../services/http-client.js';
 import { mapResponseToProperties, parseFieldMapping } from '../services/field-mapper.js';
 import { updateHubSpotObject } from '../services/hubspot-updater.js';
 import { isDuplicate, markProcessed } from '../lib/idempotency.js';
-import { createExecutionLogger } from '../lib/logger.js';
 import type { HubSpotWorkflowPayload, WorkflowResponse } from '../types/workflow.js';
 
 export async function workflowActionRoute(app: FastifyInstance): Promise<void> {
@@ -28,7 +27,7 @@ export async function workflowActionRoute(app: FastifyInstance): Promise<void> {
     const payload = request.body;
     const { callbackId, object, inputFields } = payload;
 
-    const execLog = createExecutionLogger(callbackId, object.objectId, object.objectType);
+    const execLog = request.log.child({ callbackId, objectId: object.objectId, objectType: object.objectType });
 
     if (isDuplicate(callbackId)) {
       execLog.info('Duplicate callbackId, skipping');

@@ -3,13 +3,15 @@ import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import { loadEnv } from './config/env.js';
 import { workflowActionRoute } from './routes/workflow-action.js';
-import { logger } from './lib/logger.js';
 
 async function main(): Promise<void> {
   const env = loadEnv();
 
   const app = Fastify({
-    logger: logger,
+    logger: {
+      level: env.LOG_LEVEL,
+      transport: env.NODE_ENV === 'development' ? { target: 'pino-pretty' } : undefined,
+    },
     bodyLimit: 1024 * 1024,
   });
 

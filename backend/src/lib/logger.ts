@@ -1,19 +1,12 @@
-import pino from 'pino';
-import { loadEnv } from '../config/env.js';
+import type { FastifyInstance } from 'fastify';
 
-const env = loadEnv();
-
-export const logger = pino({
-  level: env.LOG_LEVEL,
-  transport: env.NODE_ENV === 'development' ? { target: 'pino-pretty' } : undefined,
-  formatters: {
-    level: (label) => ({ level: label }),
-  },
-  timestamp: pino.stdTimeFunctions.isoTime,
-});
-
-export function createExecutionLogger(callbackId: string, objectId: number, objectType: string) {
-  return logger.child({
+export function createExecutionLogger(
+  app: FastifyInstance,
+  callbackId: string,
+  objectId: number,
+  objectType: string
+) {
+  return app.log.child({
     callbackId,
     objectId,
     objectType,
