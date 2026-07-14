@@ -24,14 +24,24 @@ export async function updateHubSpotObject(
   const resolvedType = resolveObjectType(objectType);
   const url = `${HUBSPOT_API_BASE}/crm/v3/objects/${resolvedType}/${objectId}`;
 
-  await axios.patch(
-    url,
-    { properties },
-    {
-      headers: {
-        Authorization: `Bearer ${env.HUBSPOT_SERVICE_KEY}`,
-        'Content-Type': 'application/json',
-      },
+  try {
+    await axios.patch(
+      url,
+      { properties },
+      {
+        headers: {
+          Authorization: `Bearer ${env.HUBSPOT_SERVICE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      const hubspotError = error.response.data;
+      throw new Error(
+        `HubSpot API error ${error.response.status}: ${JSON.stringify(hubspotError)}`
+      );
     }
-  );
+    throw error;
+  }
 }
