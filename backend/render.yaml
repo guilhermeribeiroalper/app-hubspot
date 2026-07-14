@@ -4,7 +4,7 @@ services:
     runtime: docker
     dockerfilePath: Dockerfile
     envVars:
-      - key: HUBSPOT_PRIVATE_APP_TOKEN
+      - key: HUBSPOT_SERVICE_KEY
         sync: false
       - key: CLIENT_SECRET
         sync: false

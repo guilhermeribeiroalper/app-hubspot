@@ -20,10 +20,28 @@ npm run dev
 
 | Variável | Descrição |
 |----------|-----------|
-| `HUBSPOT_PRIVATE_APP_TOKEN` | Token da Private App HubSpot |
-| `CLIENT_SECRET` | Secret do app (para validação de assinatura) |
+| `HUBSPOT_SERVICE_KEY` | Service Key criada em HubSpot > Desenvolvimento > Chaves > Chaves de serviço |
+| `CLIENT_SECRET` | Secret do app (para validação de assinatura X-HubSpot-Signature-v3) |
 | `PORT` | Porta do servidor (default: 3000) |
 | `LOG_LEVEL` | Nível de log: debug, info, warn, error |
+
+## Como obter as credenciais
+
+### HUBSPOT_SERVICE_KEY
+
+1. No HubSpot, vá em **Desenvolvimento** → **Chaves** → **Chaves de serviço**
+2. Clique em **Criar chave de serviço**
+3. Nomeie (ex: `workflow-engine-api`)
+4. Adicione escopos: `crm.objects.contacts`, `crm.objects.companies`, `crm.objects.deals` (read/write)
+5. Clique em **Criar**
+6. Copie o token gerado
+
+### CLIENT_SECRET
+
+1. No HubSpot, vá em **Desenvolvimento** → **Aplicativos legados**
+2. Clique no app do projeto (ou crie um novo)
+3. Aba **Auth** ou **App Info**
+4. Copie o **Client Secret**
 
 ## Deploy no Render
 

@@ -4,7 +4,7 @@ import { loadEnv } from '../config/env.js';
 const env = loadEnv();
 
 const hubspotClient = new Client({
-  accessToken: env.HUBSPOT_PRIVATE_APP_TOKEN,
+  accessToken: env.HUBSPOT_SERVICE_KEY,
 });
 
 const OBJECT_TYPE_MAP: Record<string, string> = {
