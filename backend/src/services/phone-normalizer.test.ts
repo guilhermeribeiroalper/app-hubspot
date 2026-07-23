@@ -82,3 +82,21 @@ test('whitespace-only → empty, error_message set', () => {
   assert.equal(r.phone_clean, '');
   assert.equal(r.error_message, 'raw_phone is empty');
 });
+
+test('+55-42-98417-6616 → 42984176616, cc=55 (user reported bug)', () => {
+  const r = normalizePhone('+55-42-98417-6616');
+  assert.equal(r.phone_clean, '42984176616');
+  assert.equal(r.country_code, '55');
+  assert.equal(r.had_plus, 'true');
+  assert.equal(r.digit_count, 11);
+  assert.equal(r.error_message, '');
+});
+
+test('+55 34 98417-6616 → 34984176616, cc=55 (space between DDI and DDD)', () => {
+  const r = normalizePhone('+55 34 98417-6616');
+  assert.equal(r.phone_clean, '34984176616');
+  assert.equal(r.country_code, '55');
+  assert.equal(r.had_plus, 'true');
+  assert.equal(r.digit_count, 11);
+  assert.equal(r.error_message, '');
+});

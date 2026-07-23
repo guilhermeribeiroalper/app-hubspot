@@ -62,13 +62,19 @@ export function normalizePhone(raw: unknown): NormalizedPhone {
 
   if (had_plus === 'true') {
     const afterPlus = trimmed.slice(1);
+    const spaceIndex = afterPlus.indexOf(' ');
     const dashIndex = afterPlus.indexOf('-');
 
-    if (dashIndex >= 0) {
-      country_code = afterPlus.slice(0, dashIndex).trim();
-      rest = afterPlus.slice(dashIndex + 1);
+    // Use the first space or dash (whichever comes first) to split DDI from rest
+    const separatorIndex = spaceIndex >= 0
+      ? (dashIndex >= 0 ? Math.min(spaceIndex, dashIndex) : spaceIndex)
+      : dashIndex;
+
+    if (separatorIndex >= 0) {
+      country_code = afterPlus.slice(0, separatorIndex).trim();
+      rest = afterPlus.slice(separatorIndex + 1);
     } else {
-      // No "-" after "+" — ambiguous. Per spec, return the full digit
+      // No separator after "+" — ambiguous. Return the full digit
       // string with the "+" stripped, no country code detected.
       rest = afterPlus;
     }
