@@ -4,43 +4,18 @@ import { validateHubSpotSignature } from '../services/hubspot-signature.js';
 import { makeExternalRequest } from '../services/http-client.js';
 import { mapResponseToProperties, parseFieldMapping } from '../services/field-mapper.js';
 import { isDuplicate, markProcessed } from '../lib/idempotency.js';
-import { getAssociatedCompanyId, getCompanyProperties } from '../services/hubspot-associations.js';
 import type { HubSpotWorkflowPayload, WorkflowResponse, CombinarCamposInputFields } from '../types/workflow.js';
 
-function resolveValue(
-  inputValue: string,
-  contactProperties: Record<string, string>,
-  companyProperties: Record<string, string>
-): string {
-  // If the value exists as a property in contact or company, return the property value
-  // Otherwise, return the value as-is (static value from user input)
-  if (contactProperties[inputValue] !== undefined) {
-    return contactProperties[inputValue];
-  }
-  if (companyProperties[inputValue] !== undefined) {
-    return companyProperties[inputValue];
-  }
-  return inputValue;
-}
-
-function combinarCampos(
-  contactProperties: Record<string, string>,
-  companyProperties: Record<string, string>,
-  inputFields: CombinarCamposInputFields
-): string {
+function combinarCampos(inputFields: CombinarCamposInputFields): string {
   const separador = inputFields.separador || ' | ';
   const formato = inputFields.formato || '{num} colaboradores | {estado} | {cidade}';
 
-  const numColaboradores = resolveValue(inputFields.numero_colaboradores_prop, contactProperties, companyProperties);
-  const estado = resolveValue(inputFields.estado_prop, contactProperties, companyProperties);
-  const cidade = resolveValue(inputFields.cidade_prop, contactProperties, companyProperties);
-
   return formato
-    .replace('{num}', numColaboradores)
-    .replace('{estado}', estado)
-    .replace('{cidade}', cidade)
+    .replace('{num}', inputFields.numero_colaboradores_prop)
+    .replace('{estado}', inputFields.estado_prop)
+    .replace('{cidade}', inputFields.cidade_prop)
     .split(separador)
-    .filter(v => v !== 'N/A')
+    .filter(v => v !== '')
     .join(separador);
 }
 
@@ -150,24 +125,7 @@ export async function combinarCamposRoute(app: FastifyInstance): Promise<void> {
         throw new Error('Missing required fields: numero_colaboradores_prop, estado_prop, cidade_prop');
       }
 
-      // Fetch company properties if needed (only when input is a property name, not a static value)
-      let companyProperties: Record<string, string> = {};
-      const needsCompanyFetch =
-        object.properties[camposInput.numero_colaboradores_prop] === undefined &&
-        companyProperties[camposInput.numero_colaboradores_prop] === undefined;
-
-      if (needsCompanyFetch) {
-        execLog.info('Property not found in contact, fetching from associated company');
-        const companyId = await getAssociatedCompanyId(object.objectType, object.objectId);
-        if (companyId) {
-          companyProperties = await getCompanyProperties(companyId, [camposInput.numero_colaboradores_prop]);
-          execLog.info({ companyId, companyProperties }, 'Fetched company properties');
-        } else {
-          execLog.warn('No associated company found');
-        }
-      }
-
-      const resultado = combinarCampos(object.properties, companyProperties, camposInput);
+      const resultado = combinarCampos(camposInput);
 
       markProcessed(callbackId);
 
