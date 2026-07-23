@@ -28,6 +28,14 @@ export interface InputFields {
   timeout_ms?: number;
 }
 
+export interface CombinarCamposInputFields {
+  numero_colaboradores_prop: string;
+  estado_prop: string;
+  cidade_prop: string;
+  separador?: string;
+  formato?: string;
+}
+
 export interface FieldMapping {
   [responsePath: string]: string;
 }
