@@ -103,6 +103,139 @@
           "type": "string",
           "fieldType": "text"
         }
+      },
+      {
+        "typeDefinition": {
+          "name": "razao_social",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "nome_fantasia",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "cnpj",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "situacao",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "atividade_principal",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "logradouro",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "numero",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "bairro",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "cidade",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "estado",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "cep",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "telefone",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "email",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "capital_social",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "porte",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "natureza_juridica",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "simples_nacional",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "socios",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "data_abertura",
+          "type": "string",
+          "fieldType": "text"
+        }
       }
     ],
     "labels": {
@@ -130,7 +263,26 @@
           "timeout_ms": "Request timeout in milliseconds (default: 30000)"
         },
         "outputFieldLabels": {
-          "error_message": "Error Message (if failed)"
+          "error_message": "Error Message (if failed)",
+          "razao_social": "Razão Social",
+          "nome_fantasia": "Nome Fantasia",
+          "cnpj": "CNPJ",
+          "situacao": "Situação Cadastral",
+          "atividade_principal": "Atividade Principal",
+          "logradouro": "Logradouro",
+          "numero": "Número",
+          "bairro": "Bairro",
+          "cidade": "Cidade",
+          "estado": "Estado",
+          "cep": "CEP",
+          "telefone": "Telefone",
+          "email": "E-mail",
+          "capital_social": "Capital Social",
+          "porte": "Porte",
+          "natureza_juridica": "Natureza Jurídica",
+          "simples_nacional": "Simples Nacional",
+          "socios": "Sócios (JSON)",
+          "data_abertura": "Data de Abertura"
         }
       }
     },

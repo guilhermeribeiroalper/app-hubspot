@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import { loadEnv } from './config/env.js';
 import { workflowActionRoute } from './routes/workflow-action.js';
+import { phoneNormalizerRoute } from './routes/phone-normalizer-action.js';
 
 async function main(): Promise<void> {
   const env = loadEnv();
@@ -25,6 +26,7 @@ async function main(): Promise<void> {
   });
 
   await app.register(workflowActionRoute);
+  await app.register(phoneNormalizerRoute);
 
   app.get('/health', async () => ({ ok: true }));
 

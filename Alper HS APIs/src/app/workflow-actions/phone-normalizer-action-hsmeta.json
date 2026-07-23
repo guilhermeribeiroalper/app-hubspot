@@ -1,0 +1,87 @@
+{
+  "uid": "phone_normalizer_action",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://app-hubspot.onrender.com/workflow-action/phone-normalizer",
+    "isPublished": true,
+    "supportedClients": [
+      {
+        "client": "WORKFLOWS"
+      }
+    ],
+    "inputFields": [
+      {
+        "typeDefinition": {
+          "name": "raw_phone",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      }
+    ],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "error_message",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "phone_clean",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "country_code",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "digit_count",
+          "type": "number",
+          "fieldType": "number"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "had_plus",
+          "type": "string",
+          "fieldType": "text"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "actionName": "Normalize Phone Number",
+        "actionDescription": "Receives a phone number in international format (e.g. +55-99999-0000 or +1-415-555-0123) and returns the digits only, without the leading country code. Use the 'phone_clean' output with a subsequent 'Edit record' action to map it to a HubSpot property such as 'phone'.",
+        "actionCardContent": "Normalize: {{raw_phone}}",
+        "appDisplayName": "Alper API Engine",
+        "inputFieldLabels": {
+          "raw_phone": "Raw Phone Number"
+        },
+        "inputFieldDescriptions": {
+          "raw_phone": "Phone number in international format, optionally starting with + and a country code separated by '-' (e.g. +55-99999-0000, +1-415-555-0123). If no '+' is present, the original digits are returned unchanged."
+        },
+        "outputFieldLabels": {
+          "error_message": "Error Message (if failed)",
+          "phone_clean": "Cleaned Phone (digits only, no country code)",
+          "country_code": "Detected Country Code",
+          "digit_count": "Total Digit Count (after cleaning)",
+          "had_plus": "Had Leading Plus Sign (true/false)"
+        }
+      }
+    },
+    "objectTypes": [
+      "CONTACT",
+      "COMPANY",
+      "DEAL"
+    ]
+  }
+}
