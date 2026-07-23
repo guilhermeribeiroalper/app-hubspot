@@ -4,18 +4,23 @@ import { validateHubSpotSignature } from '../services/hubspot-signature.js';
 import { makeExternalRequest } from '../services/http-client.js';
 import { mapResponseToProperties, parseFieldMapping } from '../services/field-mapper.js';
 import { isDuplicate, markProcessed } from '../lib/idempotency.js';
+import { getAssociatedCompanyId, getCompanyProperties } from '../services/hubspot-associations.js';
 import type { HubSpotWorkflowPayload, WorkflowResponse, CombinarCamposInputFields } from '../types/workflow.js';
 
 function combinarCampos(
-  properties: Record<string, string>,
+  contactProperties: Record<string, string>,
+  companyProperties: Record<string, string>,
   inputFields: CombinarCamposInputFields
 ): string {
   const separador = inputFields.separador || ' | ';
   const formato = inputFields.formato || '{num} colaboradores | {estado} | {cidade}';
 
-  const numColaboradores = properties[inputFields.numero_colaboradores_prop] || 'N/A';
-  const estado = properties[inputFields.estado_prop] || 'N/A';
-  const cidade = properties[inputFields.cidade_prop] || 'N/A';
+  // Try contact properties first, then fall back to company properties
+  const numColaboradores = contactProperties[inputFields.numero_colaboradores_prop]
+    || companyProperties[inputFields.numero_colaboradores_prop]
+    || 'N/A';
+  const estado = contactProperties[inputFields.estado_prop] || 'N/A';
+  const cidade = contactProperties[inputFields.cidade_prop] || 'N/A';
 
   return formato
     .replace('{num}', numColaboradores)
@@ -132,7 +137,20 @@ export async function combinarCamposRoute(app: FastifyInstance): Promise<void> {
         throw new Error('Missing required fields: numero_colaboradores_prop, estado_prop, cidade_prop');
       }
 
-      const resultado = combinarCampos(object.properties, camposInput);
+      // Fetch company properties if numero_colaboradores_prop is not in contact properties
+      let companyProperties: Record<string, string> = {};
+      if (!object.properties[camposInput.numero_colaboradores_prop]) {
+        execLog.info('Property not found in contact, fetching from associated company');
+        const companyId = await getAssociatedCompanyId(object.objectType, object.objectId);
+        if (companyId) {
+          companyProperties = await getCompanyProperties(companyId, [camposInput.numero_colaboradores_prop]);
+          execLog.info({ companyId, companyProperties }, 'Fetched company properties');
+        } else {
+          execLog.warn('No associated company found');
+        }
+      }
+
+      const resultado = combinarCampos(object.properties, companyProperties, camposInput);
 
       markProcessed(callbackId);
 
