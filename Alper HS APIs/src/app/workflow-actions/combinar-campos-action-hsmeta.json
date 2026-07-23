@@ -1,0 +1,105 @@
+{
+  "uid": "combinar_campos_action",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://app-hubspot.onrender.com/workflow-action/combinar-campos",
+    "isPublished": true,
+    "supportedClients": [
+      {
+        "client": "WORKFLOWS"
+      }
+    ],
+    "inputFields": [
+      {
+        "typeDefinition": {
+          "name": "numero_colaboradores_prop",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "estado_prop",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "cidade_prop",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "separador",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "formato",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": ["STATIC_VALUE"],
+        "isRequired": false
+      }
+    ],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "resultado",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "error_message",
+          "type": "string",
+          "fieldType": "text"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "actionName": "Combinar Campos",
+        "actionDescription": "Combina múltiplas propriedades de contato em um único campo de texto. Configure os nomes das propriedades e o formato de saída.",
+        "actionCardContent": "Combinar: {{numero_colaboradores_prop}}, {{estado_prop}}, {{cidade_prop}}",
+        "appDisplayName": "Alper API Engine",
+        "inputFieldLabels": {
+          "numero_colaboradores_prop": "Propriedade: Número de Colaboradores",
+          "estado_prop": "Propriedade: Estado (UF)",
+          "cidade_prop": "Propriedade: Cidade",
+          "separador": "Separador (opcional)",
+          "formato": "Formato de Saída (opcional)"
+        },
+        "inputFieldDescriptions": {
+          "numero_colaboradores_prop": "Nome interno da propriedade de número de colaboradores (ex: numero_de_colaboradores)",
+          "estado_prop": "Nome interno da propriedade de estado (ex: estado__c)",
+          "cidade_prop": "Nome interno da propriedade de cidade (ex: cidades_mg)",
+          "separador": "Separador entre valores (padrão: ' | ')",
+          "formato": "Formato de saída usando {num}, {estado}, {cidade} (padrão: '{num} colaboradores | {estado} | {cidade}')"
+        },
+        "outputFieldLabels": {
+          "resultado": "Resultado Combinado",
+          "error_message": "Erro (se falhar)"
+        }
+      }
+    },
+    "objectTypes": [
+      "CONTACT"
+    ]
+  }
+}
